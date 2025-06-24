@@ -1,7 +1,17 @@
 <template>
   <div class="main">
-    <el-container>
-      <el-header>炑铃老师的歌单</el-header>
+    <el-container style="max-width: 1400px; margin: 0 auto;">
+      <el-header>
+        <div class="header">
+          <div class="name">
+            炑铃老师的歌单
+          </div>
+          <div class="links">
+            <el-link class="link" :underline="false" href="https://space.bilibili.com/1582788472">主页</el-link>
+            <el-link class="link" :underline="false" href="https://live.bilibili.com/1961605007">直播间</el-link>
+          </div>
+        </div>
+      </el-header>
       <el-main>
         <div class="mt-4">
           <el-input v-model="search" class="input-with-select">
@@ -64,11 +74,22 @@ watch(search, (new_question) => {
 </script>
 
 <style>
+.main {
+  padding-top: 1em;
+}
+
 .input-with-select .el-input-group__prepend {
   background-color: var(--el-fill-color-blank);
 }
 
-body {
-  background-image: background;
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+.header .links .link {
+  padding-left: 0.5em;
 }
 </style>
