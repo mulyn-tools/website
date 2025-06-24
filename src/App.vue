@@ -1,5 +1,5 @@
 <template>
-  <div class="main" :style="background">
+  <div class="main">
     <el-container>
       <el-header>炑铃老师的歌单</el-header>
       <el-main>
@@ -13,7 +13,7 @@
             </template>
           </el-input>
         </div>
-        <el-table :data="tableData" style="width: 100%">
+        <el-table v-on:row-click="(event: Song) => copyToClipboard(event)" :data="tableData" style="width: 100%">
           <el-table-column prop="name" label="歌名" width="180" />
           <el-table-column prop="author" label="歌手" width="180" />
           <el-table-column prop="note" label="备注" />
@@ -25,16 +25,29 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-// import background from './assets/image.jpg'
+import { ElMessage } from 'element-plus'
 const tableData = ref([])
 const search = ref('')
 const select = ref("0")
 
-const background = ref('backgroundImage:"url(" + require("./assets/image.jpg") + ")"')
+interface Song {
+  name: string,
+  author: string,
+  note?: string
+}
 
 fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist`).then(resp => resp.json()).then(json => {
   tableData.value = json
 })
+
+const copyToClipboard = async (event: Song) => {
+  await navigator.clipboard.writeText(`点歌 ${event.name}`)
+  ElMessage({
+    message: '复制成功',
+    grouping: true,
+    type: 'success',
+  })
+}
 
 watch(search, (new_question) => {
   if (select.value == "0") {
