@@ -35,7 +35,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
 const tableData = ref([])
 const search = ref('')
 const select = ref("0")
@@ -46,8 +46,11 @@ interface Song {
   note?: string
 }
 
+const loading = ElLoading.service({})
+
 fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist`).then(resp => resp.json()).then(json => {
   tableData.value = json
+  loading.close()
 })
 
 const copyToClipboard = async (event: Song) => {
@@ -59,16 +62,28 @@ const copyToClipboard = async (event: Song) => {
   })
 }
 
+let timer = 0
+
 watch(search, (new_question) => {
-  if (select.value == "0") {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist?song_name=${new_question}`).then(resp => resp.json()).then(json => {
-      tableData.value = json
-    })
-  } else if (select.value == "1") {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist?author=${new_question}`).then(resp => resp.json()).then(json => {
-      tableData.value = json
-    })
+  const loading = ElLoading.service({})
+
+  if (timer) {
+    clearTimeout(timer)
   }
+
+  timer = setTimeout(() => {
+    if (select.value == "0") {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist?song_name=${new_question}`).then(resp => resp.json()).then(json => {
+        tableData.value = json
+        loading.close()
+      })
+    } else if (select.value == "1") {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist?author=${new_question}`).then(resp => resp.json()).then(json => {
+        tableData.value = json
+        loading.close()
+      })
+    }
+  }, 100)
 })
 
 </script>
