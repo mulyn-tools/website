@@ -64,7 +64,7 @@ const copyToClipboard = async (event: Song) => {
 
 let timer = 0
 
-watch(search, (new_question) => {
+const newQuestion = () => {
   const loading = ElLoading.service({})
 
   if (timer) {
@@ -73,18 +73,21 @@ watch(search, (new_question) => {
 
   timer = setTimeout(() => {
     if (select.value == "0") {
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist?song_name=${new_question}`).then(resp => resp.json()).then(json => {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist?song_name=${search.value}`).then(resp => resp.json()).then(json => {
         tableData.value = json
         loading.close()
       })
     } else if (select.value == "1") {
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist?author=${new_question}`).then(resp => resp.json()).then(json => {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist?author=${search.value}`).then(resp => resp.json()).then(json => {
         tableData.value = json
         loading.close()
       })
     }
   }, 100)
-})
+}
+
+watch(search, newQuestion)
+watch(select, newQuestion)
 
 </script>
 
