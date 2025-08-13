@@ -1,6 +1,6 @@
 <template>
   <div class="main" :style="{ backgroundImage: 'url(' + bg + ')' }"
-    style="background-repeat: no-repeat; background-size: 30%; background-position: 100% 100%">
+    style="background-repeat: no-repeat; background-size: 20%; background-position: 100% 100%">
     <el-container style="max-width: 1400px; margin: 0 auto;">
       <el-header>
         <div class="header">
@@ -24,8 +24,8 @@
             </template>
           </el-input>
         </div>
-        <el-table v-on:row-click="(event: Song) => copyToClipboard(event)" :data="tableData" style="width: 100%"
-          max-height="800" :style="{ backgroundColor: 'rgba(0, 0, 0, 0)' }" :row-style="rowStyle">
+        <el-table v-on:row-click="(event: Song) => copyToClipboard(event)" :data="tableData" style="width: 85%"
+        height="calc(100vh - 165px)" :style="{ backgroundColor: 'rgba(0, 0, 0, 0)' }" :row-style="rowStyle">
           <el-table-column prop="name" label="歌名" width="180" />
           <el-table-column prop="author" label="歌手" width="180" />
           <el-table-column prop="note" label="备注" />
