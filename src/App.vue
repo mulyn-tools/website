@@ -23,6 +23,7 @@
               </el-select>
             </template>
           </el-input>
+          <el-button @click="rand">随便听听</el-button>
         </div>
         <el-table v-on:row-click="(event: Song) => copyToClipboard(event)" :data="tableData" style="width: 85%"
         height="calc(100vh - 165px)" :style="{ backgroundColor: 'rgba(0, 0, 0, 0)' }" :row-style="rowStyle">
@@ -56,10 +57,15 @@ fetch(`${import.meta.env.VITE_BACKEND_URL}/playlist`).then(resp => resp.json()).
   loading.close()
 })
 
+const rand = async () => {
+  const value: Song = tableData.value[Math.floor(Math.random() * tableData.value.length)];
+  await copyToClipboard(value);
+}
+
 const copyToClipboard = async (event: Song) => {
   await navigator.clipboard.writeText(`点歌 ${event.name}`)
   ElMessage({
-    message: '复制成功',
+    message: `"${event.name}"成功复制到剪切板`,
     grouping: true,
     type: 'success',
   })
@@ -119,5 +125,9 @@ watch(select, newQuestion)
 
 .header .links .link {
   padding-left: 0.5em;
+}
+
+.mt-4 {
+  display: flex;
 }
 </style>
